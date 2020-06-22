@@ -17,13 +17,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "photos" */ '../views/Photos'),
   },
   {
-    path: '/curated',
-    name: 'curated',
-    props: true,
-
-    component: () => import(/* webpackChunkName: "curated" */ '../views/CuratedPhotos'),
-  },
-  {
     path: '/photos/:id',
     name: 'photoDetails',
     props: true,

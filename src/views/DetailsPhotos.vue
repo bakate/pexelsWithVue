@@ -22,7 +22,7 @@ export default {
       <v-row>
         <v-col cols="12">
           <v-card :href="singlePhoto.photographer_url" target="_blank" rel="noreferrer">
-            <v-img :src="singlePhoto.src.large" height="500" />
+            <v-img :src="singlePhoto.src.large" height="550" />
             <v-card-text v-text="singlePhoto.photographer"></v-card-text>
           </v-card>
         </v-col>

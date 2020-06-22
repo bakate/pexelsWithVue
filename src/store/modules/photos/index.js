@@ -51,11 +51,10 @@ const actions = {
       console.log('we need to fetch papi')
     }
   },
-  async curated({ commit }, page) {
+  async curated({ commit }) {
     console.log('currated is running')
     const { data } = await apiClient.get('/v1/curated', {
       params: {
-        page: page,
         per_page: 8,
       },
     })

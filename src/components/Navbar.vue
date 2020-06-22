@@ -5,6 +5,16 @@ export default {
   components: {
     Search,
   },
+  data() {
+    return {
+      languages: [
+        { text: 'English', code: 'en' },
+        { text: 'Spanish', code: 'es' },
+        { text: 'French', code: 'fr' },
+        { text: 'Italian', code: 'it' },
+      ],
+    }
+  },
   computed: mapState(['informations']),
 }
 </script>
@@ -28,5 +38,12 @@ export default {
 
     <v-spacer />
     <BaseButton icon="mdi-account" content="" rounded :link="{ name: 'dashboard' }" />
+    <v-overflow-btn
+      class="mt-2"
+      :items="languages"
+      label="Language"
+      :item-value="languages.code"
+      dark
+    />
   </v-app-bar>
 </template>
