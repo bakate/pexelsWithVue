@@ -1,4 +1,6 @@
 export const ALL_PIX = 'ALL_PIX'
+export const ALL_VIDEOS = 'ALL_VIDEOS'
 export const SEARCH = 'SEARCH'
 export const SINGLE_PHOTO = 'SINGLE_PHOTO'
+export const SINGLE_VIDEO = 'SINGLE_VIDEO'
 export const CURATED_PHOTOS = 'CURATED_PHOTOS'

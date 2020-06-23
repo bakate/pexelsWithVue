@@ -8,9 +8,13 @@ export default {
   },
   computed: mapState(['photos/search']),
   methods: {
-    ...mapActions('photos', ['searchedTerm']),
+    ...mapActions({
+      searchedTerm: 'photos/searchedTerm',
+      videos: 'videos/retrieveVideos',
+    }),
     getTerms(val) {
       this.searchedTerm(val)
+      this.videos(val)
       this.search = ''
     },
   },

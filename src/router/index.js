@@ -21,13 +21,20 @@ const routes = [
     name: 'photoDetails',
     props: true,
 
-    component: () => import(/* webpackChunkName: "photoDetails" */ '../views/DetailsPhotos'),
+    component: () => import(/* webpackChunkName: "photoDetails" */ '../views/PhotoDetails'),
   },
   {
     path: '/videos',
     name: 'videos',
 
     component: () => import(/* webpackChunkName: "videos" */ '../views/Videos'),
+  },
+  {
+    path: '/videos/:id',
+    name: 'videoDetails',
+    props: true,
+
+    component: () => import(/* webpackChunkName: "videoDetails" */ '../views/VideoDetails'),
   },
   {
     path: '/dashboard',

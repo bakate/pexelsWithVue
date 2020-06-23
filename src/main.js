@@ -2,11 +2,12 @@ import BaseButton from '@/components/BaseButton'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import Vue from 'vue'
+import VueCoreVideoPlayer from 'vue-core-video-player'
 import App from './App.vue'
+import i18n from './i18n'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
-import i18n from './i18n'
 
 Vue.config.productionTip = false
 
@@ -21,6 +22,7 @@ requireComponent.keys().forEach(fileName => {
 
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
+Vue.use(VueCoreVideoPlayer)
 
 new Vue({
   router,

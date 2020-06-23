@@ -23,6 +23,7 @@ const mutations = {
 
 const getters = {
   getPhotoById: state => id => state.photos.find(photo => photo.id === id),
+  getCuratedPhotoById: state => id => state.curatedPhotos.find(photo => photo.id === id),
 }
 
 const actions = {
@@ -43,22 +44,23 @@ const actions = {
     }
   },
   async getSinglePhoto({ commit, getters }, id) {
-    console.log('SinglePhoto has been called')
     const photo = await getters.getPhotoById(id)
-    if (photo) {
-      commit(SINGLE_PHOTO, photo)
+    const curatedOne = await getters.getCuratedPhotoById(id)
+    if (photo || curatedOne) {
+      commit(SINGLE_PHOTO, photo || curatedOne)
     } else {
       console.log('we need to fetch papi')
     }
   },
   async curated({ commit }) {
-    console.log('currated is running')
-    const { data } = await apiClient.get('/v1/curated', {
+    const {
+      data: { photos },
+    } = await apiClient.get('/v1/curated', {
       params: {
-        per_page: 8,
+        per_page: 10,
       },
     })
-    commit(CURATED_PHOTOS, data)
+    commit(CURATED_PHOTOS, photos)
   },
 }
 
