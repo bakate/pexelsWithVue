@@ -12,9 +12,9 @@ export default new Vuex.Store({
   },
   state: {
     informations: [
-      { icon: 'mdi-house', text: 'Home', route: 'home' },
-      { icon: 'mdi-photos', text: 'photos', route: 'photos' },
-      { icon: 'mdi-camera', text: 'videos', route: 'videos' },
+      { icon: 'mdi-home', text: 'Home', route: 'home' },
+      { icon: 'mdi-camera-enhance', text: 'photos', route: 'photos' },
+      { icon: 'mdi-video-vintage', text: 'videos', route: 'videos' },
     ],
   },
   mutations: {},

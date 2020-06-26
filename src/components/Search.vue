@@ -22,9 +22,10 @@ export default {
 </script>
 <template>
   <v-text-field
-    class="blue accent-1 pt-2 px-1"
+    class="secondary lighthen-3 pt-3 text-center text-h5"
     placeholder="search"
-    height="20"
+    height="16"
+    dense
     prepend-inner-icon="mdi-magnify"
     v-model="search"
     @keyup.enter="getTerms(search)"

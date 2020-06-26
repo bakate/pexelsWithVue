@@ -1,33 +1,39 @@
 <script>
-import { mapState } from 'vuex'
 export default {
   props: {
     id: {
       type: Number,
       required: true,
     },
-  },
-  computed: {
-    ...mapState('videos', ['singleVideo']),
-  },
-  created() {
-    this.$store.dispatch('videos/getSingleVideo', this.id)
+    singleVideo: {
+      type: Object,
+      required: true,
+    },
   },
 }
 </script>
 <template>
   <div>
-    <h2>Hello, I'm the signel video Page with id: {{ $route.params.id }}</h2>
-    <h3>{{ singleVideo }}</h3>
-    <!-- <v-container fluid>
-      <v-row>
-        <v-col cols="12">
-          <v-card :href="singleVideo.photographer_url" target="_blank" rel="noreferrer">
-            <v-img :src="singleVideo.src.large" height="550" />
-            <v-card-text v-text="singleVideo.photographer"></v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container> -->
+    <BaseVideo :singleItem="singleVideo">
+      <template v-slot:actions>
+        <BaseButton class="blue accent-1" :to="{ name: 'videos' }">
+          <slot>
+            <v-icon>mdi-arrow-left</v-icon>
+            <span>Back</span>
+          </slot>
+        </BaseButton>
+        <v-spacer></v-spacer>
+        <BaseTypography
+          ><p>Broad to you by : {{ singleVideo.user.name }}</p></BaseTypography
+        >
+        <v-spacer></v-spacer>
+        <BaseButton class="blue accent-1" :href="singleVideo.url" target="_blank" noreferrer>
+          <slot>
+            <span>learn more</span>
+            <v-icon>mdi-arrow-right</v-icon>
+          </slot>
+        </BaseButton>
+      </template>
+    </BaseVideo>
   </div>
 </template>

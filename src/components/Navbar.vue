@@ -5,8 +5,14 @@ export default {
   components: {
     Search,
   },
+  props: {
+    theme: {
+      type: String,
+    },
+  },
   data() {
     return {
+      drawer: false,
       languages: [
         { text: 'English', code: 'en' },
         { text: 'Spanish', code: 'es' },
@@ -16,34 +22,77 @@ export default {
     }
   },
   computed: mapState(['informations']),
+  methods: {
+    toggleTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      this.$root.toggle = !this.$root.toggle
+    },
+  },
 }
 </script>
 <template>
-  <v-app-bar app color="blue darken-3" height="70" dark dense>
-    <v-toolbar-title>
-      <BaseButton content="Pexels" class="font-weight-black" rounded :link="{ name: 'home' }" />
-    </v-toolbar-title>
-    <v-spacer />
+  <nav>
+    <v-app-bar app color="primary" height="70" dark dense>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <BaseButton class="font-weight-black" :to="{ name: 'home' }">
+          <slot>pexels</slot>
+        </BaseButton>
+      </v-toolbar-title>
+      <v-spacer />
+      <Search />
+      <v-spacer />
+      <BaseButton
+        v-for="(item, i) in informations"
+        :key="i"
+        class=" mr-4 hidden-sm-and-down"
+        :to="{ name: item.route }"
+      >
+        <slot>{{ item.text }}</slot>
+      </BaseButton>
 
-    <Search />
-    <v-spacer />
-    <BaseButton
-      v-for="(item, i) in informations"
-      :key="i"
-      :content="item.text"
-      class="mr-4"
-      rounded
-      :link="{ name: item.route }"
-    />
-
-    <v-spacer />
-    <BaseButton icon="mdi-account" content="" rounded :link="{ name: 'dashboard' }" />
-    <v-overflow-btn
-      class="mt-2"
-      :items="languages"
-      label="Language"
-      :item-value="languages.code"
-      dark
-    />
-  </v-app-bar>
+      <v-spacer />
+      <BaseButton :to="{ name: 'dashboard' }">
+        <slot>
+          <v-icon>mdi-account</v-icon>
+        </slot>
+      </BaseButton>
+      <v-overflow-btn
+        class="mt-2 mx-3"
+        :items="languages"
+        label="Language"
+        :item-value="languages.code"
+        dark
+      />
+      <BaseButton @click="toggleTheme">
+        <slot v-if="$root.toggle">
+          <v-icon large>mdi-white-balance-sunny</v-icon>
+        </slot>
+        <slot v-else>
+          <v-icon large>mdi-moon-waxing-crescent</v-icon>
+        </slot>
+      </BaseButton>
+    </v-app-bar>
+    <v-navigation-drawer v-model="drawer" app color="primary" dark right>
+      <v-col>
+        <v-list nav>
+          <v-list-item
+            v-for="(item, i) in informations"
+            :key="i"
+            router
+            :to="{ name: item.route }"
+            exact
+            class="my-8"
+            @click="drawer = !drawer"
+          >
+            <v-list-item-icon>
+              <v-icon dark v-text="item.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item> </v-list
+      ></v-col>
+    </v-navigation-drawer>
+  </nav>
 </template>

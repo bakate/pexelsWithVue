@@ -4,6 +4,7 @@ import upperFirst from 'lodash/upperFirst'
 import Vue from 'vue'
 import VueCoreVideoPlayer from 'vue-core-video-player'
 import App from './App.vue'
+import './assets/nprogress.css'
 import i18n from './i18n'
 import vuetify from './plugins/vuetify'
 import router from './router'
@@ -29,5 +30,10 @@ new Vue({
   store,
   vuetify,
   i18n,
+  data() {
+    return {
+      toggle: false,
+    }
+  },
   render: h => h(App),
 }).$mount('#app')

@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import store from '@/store'
+import NProgress from 'nprogress'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
@@ -13,6 +16,7 @@ const routes = [
   {
     path: '/photos',
     name: 'photos',
+    props: true,
 
     component: () => import(/* webpackChunkName: "photos" */ '../views/Photos'),
   },
@@ -20,6 +24,24 @@ const routes = [
     path: '/photos/:id',
     name: 'photoDetails',
     props: true,
+    beforeEnter: (to, from, next) => {
+      store
+        .dispatch('photos/getSinglePhoto', to.params.id)
+        .then(photo => {
+          to.params.singlePhoto = photo
+          next()
+        })
+        .catch(error => {
+          if (error.response && error.response.status == 404) {
+            next({
+              name: '404',
+              params: { resource: 'photos' },
+            })
+          } else {
+            next({ name: 'network-issue' })
+          }
+        })
+    },
 
     component: () => import(/* webpackChunkName: "photoDetails" */ '../views/PhotoDetails'),
   },
@@ -33,7 +55,12 @@ const routes = [
     path: '/videos/:id',
     name: 'videoDetails',
     props: true,
-
+    beforeEnter: (to, from, next) => {
+      store.dispatch('videos/getSingleVideo', to.params.id).then(video => {
+        to.params.singleVideo = video
+        next()
+      })
+    },
     component: () => import(/* webpackChunkName: "videoDetails" */ '../views/VideoDetails'),
   },
   {
@@ -54,6 +81,21 @@ const routes = [
 
     component: () => import(/* webpackChunkName: "signup" */ '../views/Signup'),
   },
+  {
+    path: '/notFound',
+    name: '404',
+    props: true,
+    component: () => import(/* webpackChunkName: "notFound" */ '../views/404'),
+  },
+  {
+    path: '/newtwork-issue',
+    name: 'network-issue',
+    component: () => import(/* webpackChunkName: "newtwork-issue" */ '../views/NetworkIssue'),
+  },
+  {
+    path: '*',
+    redirect: { name: '404', params: { resource: 'page' } },
+  },
 ]
 
 const router = new VueRouter({
@@ -62,4 +104,12 @@ const router = new VueRouter({
   routes,
 })
 
+router.beforeEach((_to, _from, next) => {
+  NProgress.start()
+  next()
+})
+
+router.afterEach(() => {
+  NProgress.done()
+})
 export default router

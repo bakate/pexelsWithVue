@@ -1,32 +1,38 @@
 <script>
-import { mapState } from 'vuex'
 export default {
   props: {
     id: {
       type: Number,
       required: true,
     },
-  },
-  computed: {
-    ...mapState('photos', ['singlePhoto']),
-  },
-
-  created() {
-    this.$store.dispatch('photos/getSinglePhoto', this.id)
+    singlePhoto: {
+      type: Object,
+      required: true,
+    },
   },
 }
 </script>
 <template>
   <div>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12">
-          <v-card :href="singlePhoto.photographer_url" target="_blank" rel="noreferrer">
-            <v-img :src="singlePhoto.src.large" height="550" />
-            <v-card-text v-text="singlePhoto.photographer"></v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+    <BaseCard>
+      <template v-slot:image>
+        <v-img :src="singlePhoto.src.large" height="550" aspect-ratio="1" />
+      </template>
+      <template v-slot:actions>
+        <BaseButton class="blue accent-1" :to="{ name: 'home' }">
+          <slot>
+            <v-icon>mdi-arrow-left</v-icon>
+            <span>Back</span>
+          </slot>
+        </BaseButton>
+        <v-spacer></v-spacer>
+        <BaseButton class="blue accent-1" :href="singlePhoto.url" target="_blank" noreferrer>
+          <slot>
+            <span>Visit Page</span>
+            <v-icon>mdi-arrow-right</v-icon>
+          </slot>
+        </BaseButton>
+      </template>
+    </BaseCard>
   </div>
 </template>

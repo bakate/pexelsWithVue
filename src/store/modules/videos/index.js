@@ -35,12 +35,15 @@ const actions = {
         },
       })
       commit(ALL_VIDEOS, videos)
+      return videos
     }
   },
   async getSingleVideo({ commit, getters }, id) {
     const alreadyPresent = await getters.getVideoById(id)
+
     if (alreadyPresent) {
       commit(SINGLE_VIDEO, alreadyPresent)
+      return alreadyPresent
     } else {
       console.log('we need to fetch papi')
     }

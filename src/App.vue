@@ -23,7 +23,7 @@ export default {
 <template>
   <v-app>
     <Navbar />
-    <v-main class="grey lighten-2 px-8">
+    <v-main :class="$root.toggle ? 'grey darken-2' : 'grey lighten-2'" class="px-8 dark">
       <router-view :key="$route.fullPath" />
     </v-main>
   </v-app>
