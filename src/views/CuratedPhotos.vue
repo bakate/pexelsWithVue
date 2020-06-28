@@ -1,14 +1,9 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  computed: {
-    ...mapState('photos', {
-      curatedPhotos: state => state.curatedPhotos,
-      page: state => state.page,
-    }),
-  },
+  computed: mapState('photos', ['curatedPhotos', 'page']),
   created() {
-    this.$store.dispatch('photos/curated', this.value)
+    this.$store.dispatch('photos/curated')
   },
   data() {
     return {
@@ -22,7 +17,8 @@ export default {
     <BaseTypography>
       <p>last curated photos from Pexels</p>
     </BaseTypography>
-    <BasePagniation :length="curatedPhotos.length" v-model="value" />
+    <BasePagination :length="curatedPhotos.length" v-model="value" />
     <BaseCard :items="curatedPhotos" md="4"> </BaseCard>
+    <BasePagination :length="curatedPhotos.length" v-model="value" class="mb-3" />
   </div>
 </template>

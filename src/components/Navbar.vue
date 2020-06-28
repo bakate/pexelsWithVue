@@ -1,6 +1,6 @@
 <script>
 import Search from './Search'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Search,
@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       drawer: false,
+
       languages: [
         { text: 'English', code: 'en' },
         { text: 'Spanish', code: 'es' },
@@ -21,8 +22,9 @@ export default {
       ],
     }
   },
-  computed: mapState(['informations']),
+  computed: { ...mapState(['informations']), ...mapGetters('user', ['isUserAuth']) },
   methods: {
+    ...mapActions('user', ['signOutAction']),
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       this.$root.toggle = !this.$root.toggle
@@ -50,11 +52,14 @@ export default {
       >
         <slot>{{ item.text }}</slot>
       </BaseButton>
+      <BaseButton v-if="isUserAuth" class="mr-4 hidden-sm-and-down" :to="{ name: 'dashboard' }">
+        dashboard
+      </BaseButton>
 
       <v-spacer />
-      <BaseButton :to="{ name: 'dashboard' }">
+      <BaseButton :to="{ name: 'dashboard' }" @click="signOutAction">
         <slot>
-          <v-icon>mdi-account</v-icon>
+          <v-icon v-text="isUserAuth ? 'mdi-logout-variant' : 'mdi-account'"></v-icon>
         </slot>
       </BaseButton>
       <v-overflow-btn

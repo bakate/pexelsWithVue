@@ -1,5 +1,11 @@
 <template>
-  <v-text-field :label="label" :value="value" @input="updateValue" v-bind="$attrs" />
+  <v-text-field
+    :label="label"
+    :value="value"
+    @input="updateValue"
+    v-bind="$attrs"
+    v-on="$listeners"
+  />
 </template>
 
 <script>

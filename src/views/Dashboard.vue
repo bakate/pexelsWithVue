@@ -1,56 +1,33 @@
-<template>
-  <div class="mx-auto" width="600">
-    <h2>This is the Dashboard Page</h2>
-    <BaseInput label="Hello" v-model="hi" placeholder="Salut ici" type="text" />
-    <BaseSelect
-      v-model="selectPapi"
-      label="Choisis papi ta ville"
-      :items="items"
-      itemText="state"
-      itemValue="abbr"
-      :hint="`${selectPapi.state}, ${selectPapi.abbr}`"
-    />
-    <h2>{{ hi }}</h2>
-    <BaseButton class="warning" :to="{ name: 'videos' }">
-      <slot>
-        <v-icon>mdi-arrow-left</v-icon>
-        <span>Hello</span>
-      </slot>
-    </BaseButton>
-    <BaseSelect
-      v-model="selectPapi2"
-      :items="items2"
-      itemText="etat"
-      label="Ta ville"
-      :hint="`${selectPapi2.etat}, ${selectPapi2.abr}`"
-      itemValue="abr"
-    />
-  </div>
-</template>
-
 <script>
+import { mapState, mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      hi: '',
-      selectPapi: { state: 'Florida', abbr: 'FL' },
-      selectPapi2: { etat: 'Dakar', abr: 'DKR' },
-      items: [
-        { state: 'Florida', abbr: 'FL' },
-        { state: 'Georgia', abbr: 'GA' },
-        { state: 'Nebraska', abbr: 'NE' },
-        { state: 'California', abbr: 'CA' },
-        { state: 'New York', abbr: 'NY' },
-      ],
-      items2: [
-        { etat: 'Dakar', abr: 'DKR' },
-        { etat: 'Florida', abr: 'FL' },
-        { etat: 'Georgia', abr: 'GA' },
-        { etat: 'Nebraska', abr: 'NE' },
-        { etat: 'California', abr: 'CA' },
-        { etat: 'New York', abr: 'NY' },
-      ],
+      snackbar: true,
+      text: 'Great! Good to see you!',
+      timeout: 3000,
     }
   },
+  computed: { ...mapState('user', ['user']), ...mapGetters('user', ['isUserAuth']) },
 }
 </script>
+<template>
+  <div>
+    <!-- <v-snackbar v-model="snackbar" absolute text right dark color="success" :timeout="timeout"
+      >{{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="indigo" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar> -->
+    <div class="mx-auto">
+      <BaseTypography
+        ><p class="display-1">
+          Welcome to your dashboard. <br />
+          You'll find very soon your favorite photos and videos
+        </p></BaseTypography
+      >
+    </div>
+  </div>
+</template>

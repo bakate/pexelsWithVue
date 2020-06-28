@@ -18,30 +18,34 @@ export default {
 </script>
 <template>
   <v-container fluid v-bind="$attrs">
-    <v-row v-if="items">
+    <v-row v-if="items" class="fill-height" justify="center" align="center">
       <v-col cols="12" :md="md" v-for="video in items" :key="video.id">
-        <v-card
-          link
-          class="mx-auto"
-          max-width="450"
-          max-height="350"
-          :to="{ name: 'videoDetails', params: { id: video.id } }"
-        >
-          <slot name="video">
-            <video
-              :src="video.video_files[0].link"
-              muted
-              type="video/mp4"
-              loop
-              controls
-              height="100%"
-              width="100%"
-            />
-          </slot>
-        </v-card>
+        <v-hover v-slot:default="{ hover }">
+          <v-card
+            link
+            class="mx-auto"
+            :class="{ 'on-hover': hover }"
+            :opacity="hover ? 0.6 : 1"
+            max-width="450"
+            max-height="350"
+            :to="{ name: 'videoDetails', params: { id: video.id } }"
+          >
+            <slot name="video">
+              <video
+                :src="video.video_files[0].link"
+                muted
+                type="video/mp4"
+                loop
+                controls
+                height="100%"
+                width="100%"
+              />
+            </slot>
+          </v-card>
+        </v-hover>
       </v-col>
     </v-row>
-    <v-row v-else>
+    <v-row v-else class="fill-height">
       <v-col cols="12" :md="md">
         <v-card max-height="620" max-width="960" class="mx-auto">
           <slot name="video">

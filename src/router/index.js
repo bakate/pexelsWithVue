@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { auth } from '@/firebase'
 import store from '@/store'
 import NProgress from 'nprogress'
 import Vue from 'vue'
@@ -66,20 +67,23 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
-    path: '/signin',
-    name: 'signin',
+    path: '/authentication',
+    name: 'signUser',
+    props: true,
+    component: () => import(/* webpackChunkName: "signUser" */ '../views/Signup'),
+    beforeEnter: (to, from, next) => {
+      store.dispatch('user/authAction').then(() => {
+        console.log('running from router authhhh')
 
-    component: () => import(/* webpackChunkName: "signin" */ '../views/Signin'),
-  },
-  {
-    path: '/signup',
-    name: 'signup',
-
-    component: () => import(/* webpackChunkName: "signup" */ '../views/Signup'),
+        next()
+      })
+    },
   },
   {
     path: '/notFound',
@@ -104,12 +108,22 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach((_to, _from, next) => {
+router.beforeEach((to, from, next) => {
   NProgress.start()
-  next()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        next({ name: 'signUser', redirect: to.fullPath })
+      } else {
+        store.dispatch('user/authAction').then(() => next())
+      }
+    })
+  } else {
+    next()
+  }
 })
-
 router.afterEach(() => {
   NProgress.done()
 })
+
 export default router

@@ -1,3 +1,13 @@
+<script>
+export default {
+  props: {
+    resource: {
+      type: String,
+      required: true,
+    },
+  },
+}
+</script>
 <template>
   <v-container class="text-center">
     <v-row align="stretch">
@@ -18,14 +28,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script>
-export default {
-  props: {
-    resource: {
-      type: String,
-      required: true,
-    },
-  },
-}
-</script>

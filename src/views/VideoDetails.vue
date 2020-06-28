@@ -24,7 +24,7 @@ export default {
         </BaseButton>
         <v-spacer></v-spacer>
         <BaseTypography
-          ><p>Broad to you by : {{ singleVideo.user.name }}</p></BaseTypography
+          ><p class="display-1">Broad to you by : {{ singleVideo.user.name }}</p></BaseTypography
         >
         <v-spacer></v-spacer>
         <BaseButton class="blue accent-1" :href="singleVideo.url" target="_blank" noreferrer>
