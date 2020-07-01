@@ -1,4 +1,5 @@
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
     id: {
@@ -10,6 +11,7 @@ export default {
       required: true,
     },
   },
+  methods: mapActions('photos', ['addFavoriteAction']),
 }
 </script>
 <template>
@@ -20,17 +22,18 @@ export default {
           <v-img
             :src="singlePhoto.src.large"
             height="550"
+            class="white--text align-end"
             :class="{ 'on-hover': hover }"
-            :aspect-ratio="16 / 9"
-            position="75% 25%"
+            aspect-ratio="16/9"
+            position="50% 50%"
           >
             <v-expand-transition>
               <div
                 v-if="hover"
-                class="d-flex transition-fast-in-fast-out blue lighten-4 v-card--reveal display-3 white--text"
-                style="height: 100%;"
+                class="d-flex transition-fast-in-fast-out blue lighten-4 v-card--reveal"
+                style="height: 100%"
               >
-                <v-btn icon>
+                <v-btn icon @click="addFavoriteAction(singlePhoto.id)">
                   <v-icon size="150px" color="red">mdi-heart</v-icon>
                 </v-btn>
               </div>
@@ -45,6 +48,10 @@ export default {
             <span>Back</span>
           </slot>
         </BaseButton>
+        <v-spacer></v-spacer>
+        <baseTypography
+          ><p class="display-1">Photographer: {{ singlePhoto.photographer }}</p></baseTypography
+        >
         <v-spacer></v-spacer>
         <BaseButton class="blue accent-1" :href="singlePhoto.url" target="_blank" noreferrer>
           <slot>

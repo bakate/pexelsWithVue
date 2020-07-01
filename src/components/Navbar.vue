@@ -59,7 +59,8 @@ export default {
       <v-spacer />
       <BaseButton :to="{ name: 'dashboard' }" @click="signOutAction">
         <slot>
-          <v-icon v-text="isUserAuth ? 'mdi-logout-variant' : 'mdi-account'"></v-icon>
+          <span v-if="isUserAuth">log out</span>
+          <v-icon v-else>mdi-account</v-icon>
         </slot>
       </BaseButton>
       <v-overflow-btn

@@ -67,6 +67,7 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
+    props: true,
     component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard'),
     meta: {
       requiresAuth: true,
@@ -77,13 +78,11 @@ const routes = [
     name: 'signUser',
     props: true,
     component: () => import(/* webpackChunkName: "signUser" */ '../views/Signup'),
-    beforeEnter: (to, from, next) => {
-      store.dispatch('user/authAction').then(() => {
-        console.log('running from router authhhh')
-
-        next()
-      })
-    },
+    // beforeEnter: (to, from, next) => {
+    //   store.dispatch('user/authAction').then(() => {
+    //     next()
+    //   })
+    // },
   },
   {
     path: '/notFound',

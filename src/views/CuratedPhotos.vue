@@ -1,7 +1,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  computed: mapState('photos', ['curatedPhotos', 'page']),
+  computed: mapState('photos', ['photos', 'page', 'favorites', 'isLoading']),
   created() {
     this.$store.dispatch('photos/curated')
   },
@@ -17,8 +17,9 @@ export default {
     <BaseTypography>
       <p>last curated photos from Pexels</p>
     </BaseTypography>
-    <BasePagination :length="curatedPhotos.length" v-model="value" />
-    <BaseCard :items="curatedPhotos" md="4"> </BaseCard>
-    <BasePagination :length="curatedPhotos.length" v-model="value" class="mb-3" />
+    <div v-if="isLoading"><BaseTypography /></div>
+    <BasePagination :length="photos.length" v-model="value" />
+    <BaseCard :items="photos" md="4"> </BaseCard>
+    <BasePagination :length="photos.length" v-model="value" class="mb-3" />
   </div>
 </template>

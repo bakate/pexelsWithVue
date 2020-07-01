@@ -1,7 +1,9 @@
 <script>
 import { baseComponentsMixins } from '@/mixins'
+
 export default {
   mixins: [baseComponentsMixins],
+
   props: {
     md: {
       type: String,
@@ -17,17 +19,17 @@ export default {
 </script>
 <template>
   <v-container fluid>
-    <v-row v-if="items" class="fill-height">
+    <v-row v-if="items" class="fill-height" justify="center" align="center">
       <v-col cols="12" :md="md" v-for="item in items" :key="item.id">
         <v-hover v-slot:default="{ hover }">
           <v-card
             v-bind="$attrs"
             link
-            :elevation="hover ? 18 : 2"
             class="mx-auto"
+            :elevation="hover ? 24 : 2"
             :class="{ 'on-hover': hover }"
             max-width="450"
-            :to="{ name: 'photoDetails', params: { id: item.id } }"
+            :to="{ name: 'photoDetails', params: { id: Number(item.id) } }"
           >
             <slot name="image">
               <v-img
@@ -57,10 +59,13 @@ export default {
   </v-container>
 </template>
 
-/*
 <style scoped>
-.v-card :hover {
-  opacity: 0.8;
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.5;
+  position: absolute;
+  width: 100%;
 }
 </style>
-*

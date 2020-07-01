@@ -3,21 +3,16 @@ import Helper from '@/components/HelperText'
 import { mapState } from 'vuex'
 
 export default {
-  computed: mapState('photos', ['photos', 'page']),
+  computed: mapState('photos', ['photos', 'page', 'isLoading']),
   components: {
     Helper,
   },
-
-  // page: {
-  //   type: Number,
-  //   required: true,
-  // },
 }
 </script>
 <template>
   <div>
     <Helper />
-
+    <div v-if="isLoading"><BaseTypography /></div>
     <BaseCard :items="photos" md="4">
       <template v-slot:actions>
         <v-card-actions>

@@ -24,10 +24,11 @@ export default {
           <v-card
             link
             class="mx-auto"
+            v-bind="$attrs"
             :class="{ 'on-hover': hover }"
-            :opacity="hover ? 0.6 : 1"
-            max-width="450"
-            max-height="350"
+            :elevation="hover ? 24 : 2"
+            :max-width="450"
+            :max-height="350"
             :to="{ name: 'videoDetails', params: { id: video.id } }"
           >
             <slot name="video">

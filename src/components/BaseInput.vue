@@ -4,7 +4,7 @@
     :value="value"
     @input="updateValue"
     v-bind="$attrs"
-    v-on="$listeners"
+    v-on="listeners"
   />
 </template>
 
@@ -18,6 +18,14 @@ export default {
       default: '',
     },
     value: [String, Number],
+  },
+  computed: {
+    listeners() {
+      return {
+        ...this.$listeners,
+        input: this.updateValue,
+      }
+    },
   },
 }
 </script>

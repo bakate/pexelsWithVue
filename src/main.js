@@ -2,7 +2,7 @@ import BaseButton from '@/components/BaseButton'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import Vue from 'vue'
-import VueCoreVideoPlayer from 'vue-core-video-player'
+import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import './assets/nprogress.css'
 import i18n from './i18n'
@@ -23,7 +23,7 @@ requireComponent.keys().forEach(fileName => {
 
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
-Vue.use(VueCoreVideoPlayer)
+Vue.use(Vuelidate)
 
 new Vue({
   router,

@@ -1,24 +1,30 @@
 import apiClient from '@/lib'
 import {
+  ADD_FAVORITE,
   ALL_PIX,
   CURATED_PHOTOS,
+  REMOVE_FAVORITE,
   SEARCH,
-
-
-  SET_FAVORITE, SET_PAGE,
-  SINGLE_PHOTO
+  SET_PAGE,
+  SINGLE_PHOTO,
+  TOGGLE_FAVORITE
 } from '../mutation-types'
 
 const captains = el => console.log(el)
+function dataFromLS() {
+  const data = localStorage.getItem('photos')
+  return data ? JSON.parse(data) : []
+}
+captains(dataFromLS())
 
 const state = () => ({
   search: '',
   photos: [],
   singlePhoto: {},
-  curatedPhotos: [],
-  favorites: [],
-  perPage: 9,
+  favorites: dataFromLS(),
+  perPage: 10,
   page: 1,
+  isLoading: false,
 })
 const mutations = {
   [ALL_PIX](state, photos) {
@@ -31,19 +37,25 @@ const mutations = {
     state.singlePhoto = id
   },
   [CURATED_PHOTOS](state, items) {
-    state.curatedPhotos = items
+    state.photos = items
   },
   [SET_PAGE](state, newPage) {
     state.page = newPage
   },
-  [SET_FAVORITE](state, photo) {
-    state.page = [...state, photo]
+  // [TOGGLE_FAVORITE](state, photo) {
+  //   state.favorites = [...state, photo]
+  // },
+  [ADD_FAVORITE](state, photo) {
+    state.favorites = [...state.favorites, photo]
+  },
+  [REMOVE_FAVORITE](state, photo) {
+    state.favorites = photo
   },
 }
 
 const getters = {
   getPhotoById: state => id => state.photos.find(photo => photo.id === id),
-  getCuratedPhotoById: state => id => state.curatedPhotos.find(photo => photo.id === id),
+  serialize: state => [...new Set(state.favorites)],
 }
 
 const actions = {
@@ -51,6 +63,7 @@ const actions = {
     try {
       commit(SEARCH, query)
       if (query.length) {
+        state.isLoading = true
         const {
           data: { photos },
         } = await apiClient.get('/v1/search', {
@@ -62,6 +75,7 @@ const actions = {
           },
         })
         commit(ALL_PIX, photos)
+        state.isLoading = false
         return photos
       }
     } catch (error) {
@@ -74,10 +88,10 @@ const actions = {
   async getSinglePhoto({ commit, getters }, id) {
     try {
       const photo = await getters.getPhotoById(id)
-      const curatedOne = await getters.getCuratedPhotoById(id)
-      if (photo || curatedOne) {
-        commit(SINGLE_PHOTO, photo || curatedOne)
-        return photo || curatedOne
+
+      if (photo) {
+        commit(SINGLE_PHOTO, photo)
+        return photo
       } else {
         console.log('we need to fetch papi')
       }
@@ -88,6 +102,7 @@ const actions = {
   async curated({ commit, state }, page) {
     try {
       captains({ page })
+      state.isLoading = true
       const {
         data: { photos },
       } = await apiClient.get('/v1/curated', {
@@ -98,10 +113,26 @@ const actions = {
       })
       commit(CURATED_PHOTOS, photos)
       commit(SET_PAGE, page)
+      state.isLoading = false
       return photos
     } catch (error) {
       captains(error)
     }
+  },
+  toggleFavoriteAction({ commit }, id) {
+    commit(TOGGLE_FAVORITE, id)
+  },
+  addFavoriteAction({ commit, state, getters }, id) {
+    const newPhoto = getters.getPhotoById(id)
+    newPhoto.liked = !newPhoto.liked
+
+    commit(ADD_FAVORITE, newPhoto)
+    localStorage.setItem('photos', JSON.stringify([...new Set(state.favorites)]))
+  },
+  removeFavoriteAction({ commit, state }, id) {
+    const removedPhoto = state.favorites.filter(photo => photo.id !== id)
+    commit(REMOVE_FAVORITE, removedPhoto)
+    localStorage.setItem('photos', JSON.stringify(removedPhoto))
   },
 }
 

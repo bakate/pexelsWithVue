@@ -1,26 +1,29 @@
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      snackbar: true,
-      text: 'Great! Good to see you!',
-      timeout: 3000,
+      snackbar: false,
     }
   },
-  computed: { ...mapState('user', ['user']), ...mapGetters('user', ['isUserAuth']) },
+  computed: mapGetters('photos', ['serialize']),
+  methods: {
+    ...mapActions('photos', ['removeFavoriteAction']),
+    removePhoto(id) {
+      this.removeFavoriteAction(id)
+      this.snackbar = true
+    },
+  },
 }
 </script>
 <template>
   <div>
-    <!-- <v-snackbar v-model="snackbar" absolute text right dark color="success" :timeout="timeout"
-      >{{ text }}
-      <template v-slot:action="{ attrs }">
-        <v-btn color="indigo" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
+    <BaseSnackbar v-model="snackbar" text="Element has been successfuly remoded" color="success">
+      <template v-slot:action>
+        <v-btn @click="snackbar = false" color="indigo" rounded large text dark>CLOSE</v-btn>
       </template>
-    </v-snackbar> -->
+    </BaseSnackbar>
+
     <div class="mx-auto">
       <BaseTypography
         ><p class="display-1">
@@ -28,6 +31,29 @@ export default {
           You'll find very soon your favorite photos and videos
         </p></BaseTypography
       >
+
+      <div v-if="serialize.length">
+        <v-container fluid>
+          <v-row justify="center" align="center" class="fill-height">
+            <v-col cols="12" md="3" v-for="item in serialize" :key="item.id">
+              <v-card max-width="450" link>
+                <v-img :src="item.src && item.src.medium" height="300" aspect-ratio="16/9" />
+
+                <v-card-actions>
+                  <BaseButton class="blue accent-1 mx-auto" @click="removePhoto(item.id)">
+                    <slot>
+                      <v-icon>mdi-delete</v-icon>
+                    </slot>
+                  </BaseButton>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+      <div v-else>
+        <BaseTypography><p>Go favorite some photos and you'll find them here !</p></BaseTypography>
+      </div>
     </div>
   </div>
 </template>
